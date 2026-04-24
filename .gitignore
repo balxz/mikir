@@ -1,0 +1,4 @@
+.session
+.git
+package-lock.json
+node_modules
