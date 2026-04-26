@@ -3,7 +3,7 @@ const path = require("node:path");
 
 module.exports = async (cmd, m, clients, args, is) => {
   switch (cmd) { // @category main @cmd menu @desc show fiture
-    case "menu": {
+    case "anus": {
       let a = Object.entries(
         fs.readdirSync(path.join(process.cwd(), "case"))
           .filter(f => f.endsWith(".js"))
@@ -22,12 +22,13 @@ module.exports = async (cmd, m, clients, args, is) => {
       )
         .map(([cat, items]) =>
           `╭  _*${cat.toUpperCase()}*_\n` +
-          items.map(i => `│  ∘ ${i.cmd} (${i.desc})\n╰⊶`).join("\n")
+          items.map(i => `│  ∘ ${i.cmd} (${i.desc})`).join("\n") +
+          `\n╰⊶`
         )
         .join("\n");
 
       await m.reply(
-        `Hi, @${m.sender.split("@")[0]} im, a shiina whatsapp bot designed for virtual assistant, you can download various social media or create sticker, play games so yoy don't get bored. if you want to increase premium or rent a bot, please contact customer support, to contact customer support, please use *.owner*‎${String.fromCharCode(8206).repeat(4001)}\n\n${a}\n\n> _${new Date()}_`,
+        `Hi, @${m.sender.split("@")[0]} im, a shiina whatsapp bot designed for virtual assistant, you can download various social media or create sticker, play games so yoy don't get bored. if you want to increase premium or rent a bot, please contact customer support, to contact customer support, please use *.owner*\n\n${a}\n\n> _${new Date()}_`,
         {
           mentions: [m.sender],
           contextInfo: {

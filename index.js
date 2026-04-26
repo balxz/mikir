@@ -54,6 +54,7 @@ async function startBot() {
         try {
             let m = await smsg(clients, messages[0])
             global.is = await require("./lib/prehandler").is(m, clients)
+
             console.log(
                 `${m.key.participant || m.key.remoteJid} -> ${m.chat}\n${m.body?.trim() || ""}\n${"──".repeat(20)}`
             );
