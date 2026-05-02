@@ -52,7 +52,10 @@ async function startBot() {
 
     clients.ev.on("messages.upsert", async ({ messages }) => {
         try {
+            clients.messages ??= new Map();
             let m = await smsg(clients, messages[0])
+            if (!clients.messages.has(m.chat)) clients.messages.set(m.chat, []);
+            clients.messages.get(m.chat).push(m);
             global.is = await require("./lib/prehandler").is(m, clients)
 
             console.log(

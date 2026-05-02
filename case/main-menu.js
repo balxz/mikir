@@ -27,25 +27,34 @@ module.exports = async (cmd, m, clients, args, is) => {
         )
         .join("\n");
 
-      await m.reply(
-        `Hi, @${m.sender.split("@")[0]} im, a shiina whatsapp bot designed for virtual assistant, you can download various social media or create sticker, play games so yoy don't get bored. if you want to increase premium or rent a bot, please contact customer support, to contact customer support, please use *.owner*\n\n${a}\n\n> _${new Date()}_`,
-        {
+        let { imageMessage: image } = await bail.prepareWAMessageMedia({
+          image: { url: "https://raw.githubusercontent.com/balxz/akuuu-muaakk/refs/heads/main/banner.jpeg" }
+        }, {
+          upload: clients.waUploadToServer,
+          mediaTypeOverride: "thumbnail-link"
+        })
+        let more = String.fromCharCode(8206).repeat(4001)
+        image.height = 1080
+        image.width = 2436
+        await clients.sendMessage(m.chat, {
+          text: `https://github.com/balxz/mikir.git\nHi, @${m.sender.split("@")[0]} im, a shiina whatsapp bot designed for virtual assistant, you can download various social media or create sticker, play games so yoy don"t get bored. if you want to increase premium or rent a bot, please contact customer support, to contact customer support, please use *.owner*\n\n${a}\n\n> _${new Date()}_`,
           mentions: [m.sender],
           contextInfo: {
-            isForwarded: true,
-            forwardingScore: 999,
-            mentionedJid: [m.sender],
-            externalAdReply: {
-              title: "SHIINA - WABOT",
-              body: "ხαاxzzy",
-              mediaType: 1,
-              renderLargerThumbnail: true,
-              thumbnailUrl: "https://raw.githubusercontent.com/balxz/akuuu-muaakk/refs/heads/main/banner.jpeg",
-              sourceUrl: "https://wa.me/" + m.sender.split("@")[0] +"?text=gw+hewan"
+            mentionedJid: [m.sender]
+          },
+          linkPreview: {
+            'matched-text': "https://github.com/balxz/mikir.git",
+            title: "SHIINA - WABOT",
+            description: "balxzzy",
+            previewType: 0,
+            jpegThumbnail: { url: "https://raw.githubusercontent.com/balxz/akuuu-muaakk/refs/heads/main/banner.jpeg" },
+            highQualityThumbnail: image,
+            linkPreviewMetadata: {
+              linkMediaDuration: 0,
+              socialMediaPostType: 1
             }
           }
-        }
-      );
+        }, { quoted: m })
     }
     break;
   }
