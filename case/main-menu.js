@@ -47,7 +47,7 @@ module.exports = async (cmd, m, clients, args, is) => {
             title: "SHIINA - WABOT",
             description: "balxzzy",
             previewType: 0,
-            jpegThumbnail: { url: "https://raw.githubusercontent.com/balxz/akuuu-muaakk/refs/heads/main/banner.jpeg" },
+            jpegThumbnail: "mbut",
             highQualityThumbnail: image,
             linkPreviewMetadata: {
               linkMediaDuration: 0,
@@ -59,3 +59,7 @@ module.exports = async (cmd, m, clients, args, is) => {
     break;
   }
 };
+
+
+
+
