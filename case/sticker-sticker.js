@@ -21,7 +21,7 @@ module.exports = async (cmd, m, clients, args, is) => {
         return m.reply("reply image/video/sticker");
       if (!media || (!media.url && !media.directPath))
         return m.reply("reply image/video/sticker");
-
+        await m.react("🕓")
       let stream = await downloadContentFromMessage(
         media,
         type.replace("Message", "")
@@ -63,6 +63,7 @@ module.exports = async (cmd, m, clients, args, is) => {
           quoted: m
         }
       );
+      await m.react("")
       fs.unlinkSync(result);
     }
       break

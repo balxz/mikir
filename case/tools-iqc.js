@@ -8,6 +8,7 @@ module.exports = async (cmd, m, clients, args, is) => {
         return m.reply(
         "where is text?\nex: iqc something..."
       );
+      await m.react("🕓")
       let a = await axios.post(
         "https://brat.siputzx.my.id/v2/iphone-quoted",
         {
@@ -47,6 +48,7 @@ module.exports = async (cmd, m, clients, args, is) => {
           quoted: m
         }
       );
+      await m.react("")
     }
       break
   }

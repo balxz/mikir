@@ -17,9 +17,7 @@ module.exports = async (cmd, m, clients, args, is) => {
       try {
         if (!isUrl) {
           let res = await yts(q)
-          await clients.sendMessage(m.chat, {
-            react: { text: "🕓", key: m.key }
-          })
+          await m.react("🕓")
           let video = res.all.find(v => v.type === "video")
           if (!video) return m.reply("video not found.\n> _try again next time._")
           url = video.url
@@ -32,6 +30,7 @@ module.exports = async (cmd, m, clients, args, is) => {
         if (!res.status || !res.result) return m.reply("audio not found.\n> _try again next time._")
 
         let data = res.result
+        await m.reply(`乂 *Y O U T U B E  -  P L A Y*\n_${data.title}_\n◦ ${data.author}\n_audio is process of being sent..._`)
 
         let file = await axios.get(data.url, {
           responseType: "arraybuffer",
@@ -121,6 +120,7 @@ module.exports = async (cmd, m, clients, args, is) => {
             }
           }
         }, { quoted: m })
+        await m.react("")
 
       } catch (e) {
         m.reply("failed to fetch audio.\n> _try again next time._")

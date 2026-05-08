@@ -1,8 +1,10 @@
 module.exports = async (cmd, m, clients, args, is) => {
   switch (cmd) {
     case "rt": { // @category info @cmd rt @desc runtime
+      await m.react("🕓")
       let uptime = (Date.now() - start) / 1000;
-      m.reply(formatRuntime(uptime));
+      m.reply(`乂 *R U N T I M E  -  B O T*\n> _${formatRuntime(uptime)}_`);
+      await m.react("")
     }
       break;
   }

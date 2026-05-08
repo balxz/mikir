@@ -8,7 +8,6 @@ const fs = require("fs")
 
 async function startBot() {
     let { state, saveCreds } = await bail.useMultiFileAuthState(bot.sesi)
-
     global.clients = await clientsConfig({
         logger: pino({ level: "silent" }),
         printQRInTerminal: false,
@@ -17,15 +16,13 @@ async function startBot() {
         auth: state,
         generateHighQualityLinkPreview: true
     })
-
     if (!clients.authState.creds.registered) {
         let phoneNumber = bot.pair
         setTimeout(async () => {
-            let code = await clients.requestPairingCode(phoneNumber)
+            let code = await clients.requestPairingCode(phoneNumber, "AAAAAAAA")
             console.log(code.match(/.{1,4}/g).join("-"))
         }, 3000)
     }
-
     clients.ev.on("connection.update", async update => {
         let { connection, lastDisconnect } = update
         if (connection === "close") {
@@ -43,38 +40,40 @@ async function startBot() {
     })
 
     clients.ev.on("creds.update", saveCreds)
-
-    fs.watch(path.join(__dirname, "case"), (event, filename) => {
-        if (!filename.endsWith(".js")) return
-        let file = path.join(__dirname, "case", filename)
-        delete require.cache[require.resolve(file)]
+    let kess = path.join(__dirname, "case")
+    fs.watch(kess, (eventType, filename) => {
+        if (!filename || !filename.endsWith(".js")) return
+        let file = path.join(kess, filename)
+        if (fs.existsSync(file)) {
+            delete require.cache[require.resolve(file)]
+            if (eventType === "rename") {
+                console.log(`[ CASE ] NEW FILE ~> ${filename}`)
+            } else if (eventType === "change") {
+                console.log(`[ CASE ] FILE CHANGED ~> ${filename}`)
+            }
+        } else {
+            console.log(`[ CASE ] FILE DELETED ~> ${filename}`)
+        }
     })
 
     clients.ev.on("messages.upsert", async ({ messages }) => {
         try {
-            clients.messages ??= new Map();
+            clients.messages ??= new Map()
             let m = await smsg(clients, messages[0])
-            if (!clients.messages.has(m.chat)) clients.messages.set(m.chat, []);
-            clients.messages.get(m.chat).push(m);
+            if (!clients.messages.has(m.chat)) {
+                clients.messages.set(m.chat, [])
+            }
+            clients.messages.get(m.chat).push(m)
             global.is = await require("./lib/prehandler").is(m, clients)
-
-            console.log(
-                `${m.key.participant || m.key.remoteJid} -> ${m.chat}\n${m.body?.trim() || ""}\n${"──".repeat(20)}`
-            );
-
+            require("./lib/print")(m, clients)
             if (!m.body) return
             let prefix = ""
             if (!m.body.startsWith(prefix)) return
-
             let args = m.body.slice(prefix.length).trim().split(/ +/)
             let cmd = args.shift().toLowerCase()
-
-            let files = fs
-                .readdirSync(path.join(__dirname, "case"))
-                .filter(file => file.endsWith(".js"))
-
+            let files = fs.readdirSync(kess).filter(file => file.endsWith(".js"))
             for (let file of files) {
-                let a = path.join(__dirname, "case", file)
+                let a = path.join(kess, file)
                 try {
                     delete require.cache[require.resolve(a)]
                     let b = require(a)

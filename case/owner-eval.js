@@ -4,8 +4,7 @@ const util = require("util");
 module.exports = async (cmd, m, clients, args, is) => {
   switch (cmd) {
     case "ev": { // @category owner @cmd ev @desc eval
-     // if (!m.owner.includes(m.sender)) return m.reply("This command can only be used by the owner.")
-      //console.log(is)
+      if (!m.owner.includes(m.sender)) return m.reply("This command can only be used by the owner.")
         let duh = m.body.slice(m.body.indexOf(cmd) + cmd.length).trim() || "return m";
         try {
           let evaled = await eval(`(async () => { ${duh} })()`);

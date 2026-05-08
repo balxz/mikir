@@ -26,7 +26,7 @@ module.exports = async (cmd, m, clients, args, is) => {
           `\n╰⊶`
         )
         .join("\n");
-
+        await m.react("🕓")
         let { imageMessage: image } = await bail.prepareWAMessageMedia({
           image: { url: "https://raw.githubusercontent.com/balxz/akuuu-muaakk/refs/heads/main/banner.jpeg" }
         }, {
@@ -55,6 +55,7 @@ module.exports = async (cmd, m, clients, args, is) => {
             }
           }
         }, { quoted: m })
+        await m.react("")
     }
     break;
   }

@@ -13,7 +13,7 @@ module.exports = async (cmd, m, clients, args, is) => {
         return m.reply(
         "where is text?\nex: brat something..."
       );
-
+      await m.react("🕓")
       let url = `https://brat.siputzx.my.id/gif?text=${encodeURIComponent(text)}`;
 
       let res = await axios.get(url, {
@@ -44,6 +44,7 @@ module.exports = async (cmd, m, clients, args, is) => {
           quoted: m
         }
       );
+      await m.react("")
 
       fs.unlinkSync(sticker);
     }
